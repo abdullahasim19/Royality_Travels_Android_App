@@ -1,0 +1,60 @@
+package com.myapp.project
+
+import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.widget.Button
+import android.widget.Toast
+import androidx.appcompat.widget.AppCompatEditText
+import com.google.firebase.auth.FirebaseAuth
+
+class MainActivity : AppCompatActivity() {
+    lateinit var email:AppCompatEditText
+    lateinit var pass:AppCompatEditText
+    lateinit var login:Button
+    lateinit var signUp: Button
+    var auth=FirebaseAuth.getInstance()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        register()
+        login.setOnClickListener {
+            val userEmail=email.text.toString()
+            var userPass=pass.text.toString()
+            signInFirebase(userEmail,userPass)
+
+        }
+        signUp.setOnClickListener {
+            val i=Intent(this,SignUp::class.java)
+            startActivity(i)
+        }
+    }
+    private fun signInFirebase(mailUser:String,passUser:String)
+    {
+        auth.signInWithEmailAndPassword(mailUser, passUser)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Toast.makeText(this,"Login Done",Toast.LENGTH_SHORT).show()
+                    val i =Intent(this,MainPage::class.java)
+                    i.putExtra("email",mailUser)
+                    startActivity(i)
+
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Toast.makeText(this,"Login Fail",Toast.LENGTH_SHORT).show()
+
+                }
+            }
+    }
+    private fun register()
+    {
+        email=findViewById<AppCompatEditText>(R.id.emailText)
+        pass=findViewById<AppCompatEditText>(R.id.passwordText)
+        login=findViewById<Button>(R.id.btnLogin)
+        signUp=findViewById<Button>(R.id.btnSignUp)
+    }
+
+
+
+}

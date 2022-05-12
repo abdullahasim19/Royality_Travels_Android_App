@@ -1,0 +1,82 @@
+package com.myapp.project
+
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.text.Layout
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.firebase.ui.database.FirebaseRecyclerAdapter
+import com.firebase.ui.database.FirebaseRecyclerOptions
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
+import com.google.firebase.FirebaseOptions
+import com.google.firebase.database.*
+
+class Firebase : AppCompatActivity() {
+
+    var database=FirebaseDatabase.getInstance()
+    lateinit var reference:DatabaseReference
+    lateinit var rview:RecyclerView
+    lateinit var options: FirebaseRecyclerOptions<Trips>
+    lateinit var adapter:FirebaseRecyclerAdapter<Trips,TripViewHolder>
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_firebase)
+        rview=findViewById<RecyclerView>(R.id.r1)
+        //reference=database.getReference().child("Trips")
+
+//        var insertion=FirebaseHandler<Trips>("Trips")
+//        var data=Trips(1,"Swat",10,"20 January","10 February",1.0)
+//
+//        var data1=Trips(2,"Hunza",10,"20 January","10 February",0.0)
+//        var data2=Trips(3,"Feary Meadows",10,"20 January","10 February",1.0)
+//        insertion.insert(data)
+//
+//        insertion.insert(data1)
+//        insertion.insert(data2)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+//    fun SetRecyclerView()
+//    {
+//        options=FirebaseRecyclerOptions.Builder<Trips>().setQuery(reference,Trips::class.java).build()
+//
+//        adapter = object : FirebaseRecyclerAdapter<Trips, TripViewHolder>(options) {
+//            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TripViewHolder {
+//
+//                val v:View=LayoutInflater.from(parent.getContext()).inflate(R.layout.demolayout,parent,false)
+//                return TripViewHolder(v)
+//            }
+//
+//            override fun onBindViewHolder(holder: TripViewHolder, position: Int, model: Trips) {
+//                holder.name.text=model.name
+//                holder.seats.text=model.seats.toString()
+//                holder.tbutton.setOnClickListener {
+//                    Toast.makeText(applicationContext,holder.name.text,Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//        }
+//        rview.layoutManager=LinearLayoutManager(this)
+//        adapter.startListening()
+//        rview.adapter=adapter
+//    }
+}
