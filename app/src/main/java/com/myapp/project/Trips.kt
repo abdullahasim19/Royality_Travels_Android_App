@@ -1,8 +1,9 @@
 package com.myapp.project
 
+import java.io.Serializable
 import java.util.*
 
-class Trips
+class Trips:Serializable
 {
     public lateinit var location:String
     public var seats:Int = 0

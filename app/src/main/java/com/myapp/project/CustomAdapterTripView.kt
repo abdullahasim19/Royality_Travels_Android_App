@@ -1,12 +1,14 @@
 package com.myapp.project
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+
 import androidx.recyclerview.widget.RecyclerView
 
 class CustomAdapterTripView(var trips:List<Trips>,var context:Context):
@@ -37,6 +39,9 @@ class CustomAdapterTripView(var trips:List<Trips>,var context:Context):
         }
         holder.booktrip.setOnClickListener {
             Toast.makeText(context,"Book", Toast.LENGTH_SHORT).show()
+            val inte =Intent(context,BookingActivity::class.java)
+            inte.putExtra("trips",trips[position])
+            context.startActivity(inte)
 
         }
         holder.wishlist.setOnClickListener {

@@ -216,17 +216,20 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="40dp"
-                    android:background="@color/design_default_color_secondary_variant"
+                    android:backgroundTint="@color/design_default_color_secondary_variant"
                     android:text="Book Trip"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textAllCaps="false"
+                    />
 
                 <Button
                     android:id="@+id/wishlist"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="90dp"
-                    android:background="@color/design_default_color_secondary_variant"
+                    android:backgroundTint="@color/design_default_color_secondary_variant"
                     android:text="Add to Wishlist"
+                    android:textAllCaps="false"
                     android:textStyle="bold" />
 
             </LinearLayout>

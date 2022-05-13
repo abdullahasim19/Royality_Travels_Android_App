@@ -33,6 +33,7 @@ class FirebaseHandler<T> {
                 for(d in snapshot.children)
                 {
                     val answer=d.getValue(Trips::class.java)
+
                     data.add(answer!!)
                 }
             }

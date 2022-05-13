@@ -28,7 +28,24 @@ class Firebase : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_firebase)
-        rview=findViewById<RecyclerView>(R.id.r1)
+        database.getReference("Trips").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for(d in snapshot.children)
+                {
+                    val answer=d.getValue(Trips::class.java)
+                    answer!!.price=1500
+                    if(answer.id==1)
+                        d.ref.setValue(answer)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+        })
+
+
+       // rview=findViewById<RecyclerView>(R.id.r1)
         //reference=database.getReference().child("Trips")
 
 //        var insertion=FirebaseHandler<Trips>("Trips")
