@@ -95,7 +95,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
 
         <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/emailTextdsf"
+            android:id="@+id/Seats"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Enter Seats"
@@ -105,7 +105,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/btn"
+        android:id="@+id/tripBook"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
