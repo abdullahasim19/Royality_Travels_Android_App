@@ -38,13 +38,36 @@ class BookingActivity : AppCompatActivity() {
         btn.setOnClickListener {
 
             val seatsEntered=seatsentered.text.toString().toInt()
-
-            if (seatsEntered<0 || seatsEntered>data.seats)
+            var packagee:String="None"
+            if (seatsEntered<0 || seatsEntered>data.seats) {
+                Toast.makeText(applicationContext,"Not enough Seats",Toast.LENGTH_SHORT)
                 return@setOnClickListener
+            }
             val insertion=FirebaseHandler<UserHistory>("History")
             val tempData=data
             tempData.seats=seatsEntered
-            val dataToInsert=UserHistory("abdullah@gmail",tempData)
+            if(seatsEntered>=5 && seatsEntered<10)
+            {
+                packagee="Bronze"
+                tempData.discount+=5.0
+                tempData.discount=tempData.discount/100
+                tempData.price= (tempData.price-(tempData.price*tempData.discount)).toInt()
+            }
+            else if(seatsEntered>=10 && seatsEntered<=15)
+            {
+                packagee="Silver"
+                tempData.discount+=10.0
+                tempData.discount=tempData.discount/100
+                tempData.price= (tempData.price-(tempData.price*tempData.discount)).toInt()
+            }
+            else if(seatsEntered>=15 && seatsEntered<=20)
+            {
+                packagee="Gold"
+                tempData.discount+=15.0
+                tempData.discount=tempData.discount/100
+                tempData.price= (tempData.price-(tempData.price*tempData.discount)).toInt()
+            }
+            val dataToInsert=UserHistory("abdullah@gmail",tempData,packagee)
             insertion.insert(dataToInsert)
             UpdateSeats("Trips",data,seatsEntered)
 

@@ -11,7 +11,7 @@ import android.widget.Toast
 
 import androidx.recyclerview.widget.RecyclerView
 
-class CustomAdapterTripView(var trips:List<Trips>,var context:Context,userInfo:User):
+class CustomAdapterTripView(var trips:List<Trips>,var context:Context,var userInfo:User):
     RecyclerView.Adapter<CustomAdapterTripView.ViewHolderTrip>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderTrip {
