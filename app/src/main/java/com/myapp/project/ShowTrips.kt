@@ -22,10 +22,11 @@ class ShowTrips : AppCompatActivity() {
     lateinit var adapterCustom:CustomAdapterTripView
     lateinit var options: FirebaseRecyclerOptions<Trips>
     lateinit var adapter: FirebaseRecyclerAdapter<Trips, TripViewHolder>
-
+    lateinit var userData:User
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_trips)
+        userData=intent.getSerializableExtra("UserInfo") as User
         initialize()
         //SetRecyclerView()
 
@@ -42,7 +43,7 @@ class ShowTrips : AppCompatActivity() {
 
         var tripsarray:List<Trips>
         tripsarray=ArrayList<Trips>()
-        adapterCustom= CustomAdapterTripView(tripsarray,this)
+        adapterCustom= CustomAdapterTripView(tripsarray,this,userData)
         recycler.layoutManager=LinearLayoutManager(this)
         recycler.adapter=adapterCustom
 

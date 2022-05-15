@@ -1,18 +1,17 @@
 package com.myapp.project
 
-import android.content.ContentValues.TAG
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatEditText
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.ktx.Firebase
 
 class SignUp : AppCompatActivity() {
     lateinit var email: AppCompatEditText
     lateinit var pass: AppCompatEditText
+    lateinit var nameEdit:AppCompatEditText
+    lateinit var phone:AppCompatEditText
     lateinit var signUp: Button
     var auth=FirebaseAuth.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,23 +21,29 @@ class SignUp : AppCompatActivity() {
         signUp.setOnClickListener {
             var mail=email.text.toString()
             var password=pass.text.toString()
-            signUpFirebase(mail,password)
+            val username=nameEdit.text.toString()
+            val numberphone=phone.text.toString()
+
+            signUpFirebase(mail,password,username,numberphone)
         }
     }
 
-    private fun signUpFirebase(userEmail:String,userPassword:String)
+    private fun signUpFirebase(userEmail:String,userPassword:String,username:String,numberphone:String)
     {
         auth.createUserWithEmailAndPassword(userEmail, userPassword)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Toast.makeText(this,"Login Done",Toast.LENGTH_SHORT).show()
 
+                    val dataInsert=User(userEmail,userPassword,username,numberphone)
+                    val fb=FirebaseHandler<User>("Users")
+                    fb.insert(dataInsert)
+                    Toast.makeText(this,"Account Created",Toast.LENGTH_SHORT).show()
+                    finish()
                 }
                 else
                 {
                     // If sign in fails, display a message to the user.
-                    Toast.makeText(this,"Login Fail",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this,task.exception!!.message.toString(),Toast.LENGTH_SHORT).show()
                 }
             }
     }
@@ -48,7 +53,8 @@ class SignUp : AppCompatActivity() {
         email=findViewById<AppCompatEditText>(R.id.emailText)
         pass=findViewById<AppCompatEditText>(R.id.passwordText)
         signUp=findViewById<Button>(R.id.btnSignUp)
+        nameEdit=findViewById<AppCompatEditText>(R.id.userNameSignUp)
+        phone=findViewById<AppCompatEditText>(R.id.userPhoneSignUp)
     }
-
 
 }

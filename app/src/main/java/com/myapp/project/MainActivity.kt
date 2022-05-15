@@ -7,6 +7,10 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatEditText
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class MainActivity : AppCompatActivity() {
     lateinit var email:AppCompatEditText
@@ -37,8 +41,29 @@ class MainActivity : AppCompatActivity() {
                     // Sign in success, update UI with the signed-in user's information
                     Toast.makeText(this,"Login Done",Toast.LENGTH_SHORT).show()
                     val i =Intent(this,MainPage::class.java)
-                    i.putExtra("email",mailUser)
-                    startActivity(i)
+
+                    val reference= FirebaseDatabase.getInstance()
+                    reference.getReference("Users").addListenerForSingleValueEvent(object :
+                        ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            for(d in snapshot.children)
+                            {
+                                val answer=d.getValue(User::class.java)
+                                if(answer!!.email==mailUser)
+                                {
+
+                                    i.putExtra("UserInfo",answer)
+                                    startActivity(i)
+                                }
+                            }
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                        }
+
+                    })
+
+
 
                 } else {
                     // If sign in fails, display a message to the user.
@@ -46,6 +71,30 @@ class MainActivity : AppCompatActivity() {
 
                 }
             }
+    }
+    private fun searchUser(emailOftheUser:String):User
+    {
+        var temp=User()
+        val reference= FirebaseDatabase.getInstance()
+        reference.getReference("Users").addListenerForSingleValueEvent(object :
+            ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for(d in snapshot.children)
+                {
+                    val answer=d.getValue(User::class.java)
+                    if(answer!!.email==emailOftheUser)
+                    {
+                        temp=answer
+                        break
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+        })
+        return temp
     }
     private fun register()
     {

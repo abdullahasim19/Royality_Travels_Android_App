@@ -1,6 +1,7 @@
 package com.myapp.project
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
@@ -22,7 +23,16 @@ class FirebaseHandler<T> {
         var check:Boolean=false
         reference=database.getReference(tablename).push()
 
-        reference.setValue(data).addOnCompleteListener { p0 -> check = p0.isSuccessful() }
+        try {
+            reference.setValue(data).addOnCompleteListener {
+                    p0 -> check = p0.isSuccessful ;
+
+            }
+        }
+        catch (e:Exception) {
+            Log.d("Meow",e.message.toString())
+        }
+
         return check
     }
     fun getTripsData(data:ArrayList<Trips>)

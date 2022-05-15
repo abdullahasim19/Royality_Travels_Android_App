@@ -1,18 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainPage">
+
+    >
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainPage"
+    android:orientation="vertical"
+    android:background="@color/teal_700"
+    >
 
     <TextView
-        android:id="@+id/textView"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:id="@+id/welcometext"
+        android:textSize="30sp"
+        android:text="Welcome "
+        />
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="267dp"
-        android:layout_marginEnd="170dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:src="@drawable/back"
+        android:layout_margin="50dp"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        >
+
+        <Button
+            android:id="@+id/viewtrips"
+            android:layout_width="120dp"
+            android:layout_height="100dp"
+            android:backgroundTint="@color/design_default_color_error"
+            android:text="View Trips" />
+        <Button
+            android:layout_marginLeft="150dp"
+            android:layout_width="120dp"
+            android:layout_height="100dp"
+            android:text="View History"
+            android:backgroundTint="@color/design_default_color_error"
+            />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        >
+        <Button
+            android:layout_width="120dp"
+            android:layout_height="100dp"
+            android:text="View WishList"
+            android:backgroundTint="@color/design_default_color_error"
+            />
+        <Button
+            android:layout_marginLeft="150dp"
+            android:layout_width="120dp"
+            android:layout_height="100dp"
+            android:text="View Packages"
+            android:backgroundTint="@color/design_default_color_error"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        >
+        <Button
+            android:layout_width="120dp"
+            android:layout_height="100dp"
+            android:text="Edit Profile"
+            android:backgroundTint="@color/design_default_color_error"
+            />
+        <Button
+            android:layout_marginLeft="150dp"
+            android:layout_width="120dp"
+            android:layout_height="100dp"
+            android:text="Explore"
+            android:backgroundTint="@color/design_default_color_error"
+            />
+
+    </LinearLayout>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:backgroundTint="@color/design_default_color_error"
+        android:layout_marginLeft="150dp"
+        android:text="Sign Out"
+        />
+
+</LinearLayout>
+</ScrollView>
