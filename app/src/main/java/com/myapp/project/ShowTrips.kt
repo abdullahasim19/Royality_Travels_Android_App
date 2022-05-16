@@ -23,8 +23,15 @@ class ShowTrips : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_trips)
-       // userData=intent.getSerializableExtra("UserInfo") as User
-        userData=User()
+        //userData=User()
+        //userData.email="abdullah@gmail.com"
+        try {
+            userData=intent.getSerializableExtra("UserInfo") as User
+        }
+        catch (e:Exception)
+        {
+            Toast.makeText(this,e.message.toString(),Toast.LENGTH_SHORT).show()
+        }
         initialize()
         //SetRecyclerView()
 

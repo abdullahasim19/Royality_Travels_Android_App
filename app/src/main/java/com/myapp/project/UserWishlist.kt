@@ -11,21 +11,19 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.database.*
 
-class ShowHistory : AppCompatActivity() {
+class UserWishlist : AppCompatActivity() {
     lateinit var recycler: RecyclerView
     var check:Int=0
     lateinit var spinnerFilter: Spinner
     var database= FirebaseDatabase.getInstance()
     lateinit var reference: DatabaseReference
-    lateinit var adapterCustom:CustomAdapterHistory
+    lateinit var adapterCustom:CustomAdapterWishlist
     lateinit var options: FirebaseRecyclerOptions<Trips>
     lateinit var adapter: FirebaseRecyclerAdapter<Trips, TripViewHolder>
     lateinit var userData:User
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //userData=User()
-        //userData.email="abdullah@gmail"
+        setContentView(R.layout.activity_user_wishlist)
         try {
             userData=intent.getSerializableExtra("UserInfo") as User
         }
@@ -33,33 +31,33 @@ class ShowHistory : AppCompatActivity() {
         {
             Toast.makeText(this,e.message.toString(), Toast.LENGTH_SHORT).show()
         }
-        setContentView(R.layout.activity_show_history)
         initialize()
+
     }
     private fun initialize()
     {
-        recycler=findViewById<RecyclerView>(R.id.recyclerHistory)//recycler view
-        spinnerFilter=findViewById<Spinner>(R.id.spinnerFilterHist)//spinner
-        reference=database.reference.child("History")
+        recycler=findViewById<RecyclerView>(R.id.recyclerWishlist)//recycler view
+        spinnerFilter=findViewById<Spinner>(R.id.spinnerFilterWish)//spinner
+        reference=database.reference.child("Wishlist")
         var arr= ArrayAdapter.createFromResource(
             this,R.array.filterings,android.R.layout.simple_spinner_item)//setting array adapter for spinner
         arr.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerFilter.adapter=arr
 
-        var Histarray:List<UserHistory>
-        Histarray=ArrayList<UserHistory>()
-        adapterCustom= CustomAdapterHistory(Histarray,this,userData)
+        var wisharray:List<WishListData>
+        wisharray=ArrayList<WishListData>()
+        adapterCustom= CustomAdapterWishlist(wisharray,this,userData)
         recycler.layoutManager= LinearLayoutManager(this)
         recycler.adapter=adapterCustom
 
-        database.getReference("History").addValueEventListener(object : ValueEventListener {
+        database.getReference("Wishlist").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for(d in snapshot.children)
                 {
-                    val answer=d.getValue(UserHistory::class.java)
-                    if(answer!!.email==userData.email)
+                    val answer=d.getValue(WishListData::class.java)
+                    if(answer!!.emailWish==userData.email)
                     {
-                        Histarray.add(answer)
+                        wisharray.add(answer)
                     }
                 }
                 adapterCustom.notifyDataSetChanged()
@@ -107,5 +105,4 @@ class ShowHistory : AppCompatActivity() {
 //            Toast.makeText(this,ex.message.toString(),Toast.LENGTH_LONG).show()
 //        }
     }
-
 }

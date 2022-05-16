@@ -12,11 +12,20 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 class BookingActivity : AppCompatActivity() {
-
+    lateinit var userData:User
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_booking)
         val data=intent.getSerializableExtra("trips") as Trips
+        try {
+            userData=intent.getSerializableExtra("UserInfo") as User
+        }
+        catch (e:Exception)
+        {
+            Toast.makeText(this,e.message.toString(),Toast.LENGTH_SHORT).show()
+        }
+        val showTheName=findViewById<TextView>(R.id.userNameBooking)
+        showTheName.text=userData.userNameTrip.toString()
 
         val location=findViewById<TextView>(R.id.lname)
         val price=findViewById<TextView>(R.id.lprice)
@@ -67,7 +76,7 @@ class BookingActivity : AppCompatActivity() {
                 tempData.discount=tempData.discount/100
                 tempData.price= (tempData.price-(tempData.price*tempData.discount)).toInt()
             }
-            val dataToInsert=UserHistory("abdullah@gmail",tempData,packagee)
+            val dataToInsert=UserHistory(userData.email,tempData,packagee)
             insertion.insert(dataToInsert)
             UpdateSeats("Trips",data,seatsEntered)
 

@@ -38,14 +38,20 @@ class CustomAdapterTripView(var trips:List<Trips>,var context:Context,var userIn
             holder.discounts.setTextColor(context.resources.getColor(R.color.green))
         }
         holder.booktrip.setOnClickListener {
-            Toast.makeText(context,"Book", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(context,"Book", Toast.LENGTH_SHORT).show()
             val inte =Intent(context,BookingActivity::class.java)
             inte.putExtra("trips",trips[position])
+            inte.putExtra("UserInfo",userInfo)
             context.startActivity(inte)
 
         }
         holder.wishlist.setOnClickListener {
             Toast.makeText(context,"Wish", Toast.LENGTH_SHORT).show()
+            val dataToInsert=WishListData(userInfo.email,trips[position])
+
+            val refe=FirebaseHandler<WishListData>("Wishlist")
+            refe.insert(dataToInsert)
+            Toast.makeText(context,"Added to Wishlist",Toast.LENGTH_SHORT).show()
         }
     }
 
