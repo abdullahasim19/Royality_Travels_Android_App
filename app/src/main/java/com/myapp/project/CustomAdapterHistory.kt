@@ -26,6 +26,7 @@ class CustomAdapterHistory(var hist:List<UserHistory>,var context:Context,var us
         val price=itemView.findViewById<TextView>(R.id.HistorytripPrice)
         val pack=itemView.findViewById<TextView>(R.id.HistoryPackage)
         val give=itemView.findViewById<AppCompatEditText>(R.id.reviewToGive)
+        val ratings=itemView.findViewById<AppCompatEditText>(R.id.ratingToGive)
 
     }
 
@@ -49,7 +50,7 @@ class CustomAdapterHistory(var hist:List<UserHistory>,var context:Context,var us
             holder.discounts.setTextColor(context.resources.getColor(R.color.design_default_color_error))
         }
         else {
-            holder.discounts.text = checkDiscount.toString()
+            holder.discounts.text = (checkDiscount*100.0).toString()
             holder.discounts.setTextColor(context.resources.getColor(R.color.green))
         }
         val p=hist[position].curPackage
@@ -58,7 +59,18 @@ class CustomAdapterHistory(var hist:List<UserHistory>,var context:Context,var us
         holder.review.setOnClickListener {
             val remail=userInfo.email
             val givens=holder.give.text.toString()
-            val dataToInsert=TripReview(remail,hist[position].tripdetails.id,hist[position].tripdetails.location,givens)
+            val ratingGivens=holder.ratings.text.toString().toDouble()
+            if(givens.isEmpty())
+            {
+                Toast.makeText(context,"Kindly Write your Review",Toast.LENGTH_SHORT)
+                return@setOnClickListener
+            }
+            if(holder.ratings.text.toString().isEmpty())
+            {
+                Toast.makeText(context,"Kindly Write your Rating",Toast.LENGTH_SHORT)
+                return@setOnClickListener
+            }
+            val dataToInsert=TripReview(remail,hist[position].tripdetails.id,hist[position].tripdetails.location,givens,ratingGivens)
             val doits=FirebaseHandler<TripReview>("Reviews")
             doits.insert(dataToInsert)
             Toast.makeText(context,"Review Given",Toast.LENGTH_SHORT).show()
