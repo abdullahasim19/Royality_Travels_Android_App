@@ -1,14 +1,22 @@
 package com.myapp.project
 
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.RecyclerView
 
 class CustomAdapterHistory(var hist:List<UserHistory>,var context:Context,var userInfo:User):
@@ -35,6 +43,7 @@ class CustomAdapterHistory(var hist:List<UserHistory>,var context:Context,var us
         return CustomAdapterHistory.ViewHolderHistory(v)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: ViewHolderHistory, position: Int) {
         holder.id.text=hist[position].tripdetails.id.toString()
 
@@ -74,12 +83,26 @@ class CustomAdapterHistory(var hist:List<UserHistory>,var context:Context,var us
             val doits=FirebaseHandler<TripReview>("Reviews")
             doits.insert(dataToInsert)
             Toast.makeText(context,"Review Given",Toast.LENGTH_SHORT).show()
+            ShowNotification("Royality Travels","Review and Rating Done")
         }
     }
 
     override fun getItemCount(): Int {
         return hist.size
     }
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun ShowNotification(title:String,text:String)
+    {
+        var channel= NotificationChannel("1","1", NotificationManager.IMPORTANCE_DEFAULT)
+        var manager=context.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
+        manager.createNotificationChannel(channel)
 
+        var builder = Notification.Builder(context,"1",)
+        builder.setSmallIcon(R.drawable.ic_stat_add_alert).setContentTitle(title).setContentText(text)
+
+        var compact = NotificationManagerCompat.from(context,)
+        compact.notify(1,builder.build())
+
+    }
 
 }
