@@ -63,5 +63,12 @@ class MainPage : AppCompatActivity() {
             finish()
 
         }
+
+        val exB=findViewById<Button>(R.id.btnExplore)
+
+        exB.setOnClickListener {
+            val i=Intent(this,ExplorePage::class.java)
+            startActivity(i)
+        }
     }
 }
