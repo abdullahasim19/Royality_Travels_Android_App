@@ -39,11 +39,23 @@ class Firebase : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_firebase)
 
-        val b=findViewById<Button>(R.id.button)
+        val data=FirebaseHandler<TourPlans>("Tour Plans")
 
-        b.setOnClickListener {
-            ShowNotification("hello","world")
-        }
+        val d1=TourPlans(1,"Swat","Departure at 1 stay of 2 hours")
+        val d2=TourPlans(2,"Hunza","Departure at 1 stay of 2 hours")
+        val d3 = TourPlans(3,"Feary Meadows","Departure at 1 stay of 2 hours")
+
+        data.insert(d1)
+        data.insert(d2)
+        data.insert(d3)
+
+
+//
+//        val b=findViewById<Button>(R.id.button)
+//
+//        b.setOnClickListener {
+//            ShowNotification("hello","world")
+//        }
     }
     @RequiresApi(Build.VERSION_CODES.O)
     fun ShowNotification(title:String,text:String)

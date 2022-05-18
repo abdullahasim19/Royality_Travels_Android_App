@@ -14,6 +14,7 @@ class MainPage : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_page)
         lateinit var userData:User
+
         try {
             userData=intent.getSerializableExtra("UserInfo") as User
         }
@@ -46,6 +47,14 @@ class MainPage : AppCompatActivity() {
             i.putExtra("UserInfo",userData)
             startActivity(i)
         }
+
+
+        val tourPlanButton=findViewById<Button>(R.id.viewTourPlan)
+        tourPlanButton.setOnClickListener {
+            val i=Intent(this,ViewTourPlans::class.java)
+            startActivity(i)
+        }
+
 
         val signOutButton=findViewById<Button>(R.id.signOut)
 

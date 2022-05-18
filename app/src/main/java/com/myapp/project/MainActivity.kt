@@ -63,8 +63,6 @@ class MainActivity : AppCompatActivity() {
 
                     })
 
-
-
                 } else {
                     // If sign in fails, display a message to the user.
                     Toast.makeText(this,"Login Fail",Toast.LENGTH_SHORT).show()
