@@ -5,13 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Filter
+import android.widget.Filterable
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.recyclerview.widget.RecyclerView
 
-class CustomAdapterWishlist(var wish:List<WishListData>, var context: Context, var userInfo:User):
-    RecyclerView.Adapter<CustomAdapterWishlist.ViewHolderWishlist>()
+class CustomAdapterWishlist(var wish:List<WishListData>,var wishFull:List<WishListData>, var context: Context, var userInfo:User):
+    RecyclerView.Adapter<CustomAdapterWishlist.ViewHolderWishlist>(),Filterable
 {
+
+    var filterType="ID"
 
     class ViewHolderWishlist(ItemView: View): RecyclerView.ViewHolder(ItemView){
         val id=itemView.findViewById<TextView>(R.id.WishListtripID)
@@ -51,5 +55,67 @@ class CustomAdapterWishlist(var wish:List<WishListData>, var context: Context, v
 
     override fun getItemCount(): Int {
         return wish.size
+    }
+
+    fun setSearchType(type:String)
+    {
+        this.filterType=type
+    }
+
+    override fun getFilter(): Filter {
+        return wishFilter
+    }
+    var wishFilter=object : Filter(){
+        override fun performFiltering(constraint: CharSequence?): FilterResults {
+            var tempList=ArrayList<WishListData>()
+            var filteredList:List<WishListData>
+            if(constraint==null || constraint.length==0)
+            {
+                filteredList=wishFull.toList()
+            }
+            else
+            {
+                var pattern=constraint.toString().toLowerCase().trim()
+                for (item:WishListData in wishFull)
+                {
+                    if(filterType=="ID") {
+                        if (item.tripdetailsWish.id.toString().toLowerCase().contains(pattern)) {
+                            tempList.add(item)
+                        }
+                    }
+                    else if(filterType=="Location")
+                    {
+                        if (item.tripdetailsWish.location.toLowerCase().contains(pattern)) {
+                            tempList.add(item)
+                        }
+                    }
+                    else if(filterType=="Seats")
+                    {
+                        if (item.tripdetailsWish.seats.toString().toLowerCase().contains(pattern)) {
+                            tempList.add(item)
+                        }
+                    }
+                    else if(filterType=="Price")
+                    {
+                        if (item.tripdetailsWish.price.toString().toLowerCase().contains(pattern)) {
+                            tempList.add(item)
+                        }
+                    }
+
+                }
+                filteredList=tempList.toList()
+            }
+
+            var results=FilterResults()
+            results.values=filteredList
+            return results
+        }
+
+        override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+            var temps=results!!.values as List<WishListData>
+            wish=temps.toList()
+            notifyDataSetChanged()
+        }
+
     }
 }

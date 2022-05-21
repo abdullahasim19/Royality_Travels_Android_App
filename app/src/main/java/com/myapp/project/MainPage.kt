@@ -70,5 +70,12 @@ class MainPage : AppCompatActivity() {
             val i=Intent(this,ExplorePage::class.java)
             startActivity(i)
         }
+
+        val edits=findViewById<Button>(R.id.btnEdit)
+        edits.setOnClickListener {
+            val i=Intent(this,EditProfile::class.java)
+            i.putExtra("UserInfo",userData)
+            startActivity(i)
+        }
     }
 }

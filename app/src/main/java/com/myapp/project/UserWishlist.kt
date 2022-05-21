@@ -2,9 +2,8 @@ package com.myapp.project
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ArrayAdapter
-import android.widget.Spinner
-import android.widget.Toast
+import android.view.View
+import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.database.FirebaseRecyclerAdapter
@@ -19,8 +18,9 @@ class UserWishlist : AppCompatActivity() {
     lateinit var reference: DatabaseReference
     lateinit var adapterCustom:CustomAdapterWishlist
     lateinit var options: FirebaseRecyclerOptions<Trips>
-    lateinit var adapter: FirebaseRecyclerAdapter<Trips, TripViewHolder>
+    //lateinit var adapter: FirebaseRecyclerAdapter<Trips, TripViewHolder>
     lateinit var userData:User
+    var loadingDialog=LoadingDialog(this@UserWishlist)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_wishlist)
@@ -31,6 +31,7 @@ class UserWishlist : AppCompatActivity() {
         {
             Toast.makeText(this,e.message.toString(), Toast.LENGTH_SHORT).show()
         }
+        loadingDialog.startLoading()
         initialize()
 
     }
@@ -46,7 +47,11 @@ class UserWishlist : AppCompatActivity() {
 
         var wisharray:List<WishListData>
         wisharray=ArrayList<WishListData>()
-        adapterCustom= CustomAdapterWishlist(wisharray,this,userData)
+
+        var wisharrayFull:List<WishListData>
+        wisharrayFull=ArrayList<WishListData>()
+
+        adapterCustom= CustomAdapterWishlist(wisharray,wisharrayFull,this,userData)
         recycler.layoutManager= LinearLayoutManager(this)
         recycler.adapter=adapterCustom
 
@@ -58,51 +63,53 @@ class UserWishlist : AppCompatActivity() {
                     if(answer!!.emailWish==userData.email)
                     {
                         wisharray.add(answer)
+                        wisharrayFull.add(answer)
                     }
                 }
                 adapterCustom.notifyDataSetChanged()
+                loadingDialog.dismissDialog()
             }
 
             override fun onCancelled(error: DatabaseError) {
             }
 
         })
-//        spinnerFilter.setOnItemSelectedListener(object :AdapterView.OnItemSelectedListener{
-//            override fun onItemSelected(
-//                parent: AdapterView<*>?,
-//                view: View?,
-//                position: Int,
-//                id: Long
-//            ) {
-//                if(adapter!=null)
-//                {
-//                    adapter!!.setSearchType(parent!!.getItemAtPosition(position).toString())
-//                }
-//            }
-//
-//            override fun onNothingSelected(parent: AdapterView<*>?) {
-//
-//            }
-//
-//        })
+        spinnerFilter.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                if(adapterCustom!=null)
+                {
+                    adapterCustom!!.setSearchType(parent!!.getItemAtPosition(position).toString())
+                }
+            }
 
-//        try {
-//            val searchResult=findViewById<SearchView>(R.id.searchBar)
-//            searchResult.setOnQueryTextListener(object :SearchView.OnQueryTextListener{
-//                override fun onQueryTextSubmit(query: String?): Boolean {
-//                    return false
-//                }
-//
-//                override fun onQueryTextChange(newText: String?): Boolean {
-//                    adapter!!.getFilter().filter(newText)
-//                    return true
-//                }
-//
-//            })
-//        }
-//        catch (ex:Exception)
-//        {
-//            Toast.makeText(this,ex.message.toString(),Toast.LENGTH_LONG).show()
-//        }
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+
+        })
+
+        try {
+            val searchResult=findViewById<SearchView>(R.id.searchBarWishlist)
+            searchResult.setOnQueryTextListener(object :SearchView.OnQueryTextListener{
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return false
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    adapterCustom!!.getFilter().filter(newText)
+                    return true
+                }
+
+            })
+        }
+        catch (ex:Exception)
+        {
+            Toast.makeText(this,ex.message.toString(),Toast.LENGTH_LONG).show()
+        }
     }
 }

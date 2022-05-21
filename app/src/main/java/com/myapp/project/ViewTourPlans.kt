@@ -2,8 +2,8 @@ package com.myapp.project
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ArrayAdapter
-import android.widget.Spinner
+import android.view.View
+import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.database.FirebaseRecyclerAdapter
@@ -18,11 +18,13 @@ class ViewTourPlans : AppCompatActivity() {
     lateinit var reference: DatabaseReference
     lateinit var adapterCustom:CustomAdapterTourPlan
     lateinit var options: FirebaseRecyclerOptions<Trips>
-    lateinit var adapter: FirebaseRecyclerAdapter<Trips, TripViewHolder>
+    //lateinit var adapter: FirebaseRecyclerAdapter<Trips, TripViewHolder>
+    var loadingDialog=LoadingDialog(this@ViewTourPlans)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_tour_plans)
+        loadingDialog.startLoading()
         initialize()
     }
     private fun initialize()
@@ -31,13 +33,17 @@ class ViewTourPlans : AppCompatActivity() {
         spinnerFilter=findViewById<Spinner>(R.id.spinnerFilterTour)//spinner
         reference=database.reference.child("Tour Plans")
         var arr= ArrayAdapter.createFromResource(
-            this,R.array.filterings,android.R.layout.simple_spinner_item)//setting array adapter for spinner
+            this,R.array.tourplan,android.R.layout.simple_spinner_item)//setting array adapter for spinner
         arr.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerFilter.adapter=arr
 
         var planarray:List<TourPlans>
         planarray=ArrayList<TourPlans>()
-        adapterCustom= CustomAdapterTourPlan(planarray,this)
+
+        var planarrayFull:List<TourPlans>
+        planarrayFull=ArrayList<TourPlans>()
+
+        adapterCustom= CustomAdapterTourPlan(planarray,planarrayFull,this)
         recycler.layoutManager= LinearLayoutManager(this)
         recycler.adapter=adapterCustom
 
@@ -49,52 +55,54 @@ class ViewTourPlans : AppCompatActivity() {
 
                     if (answer != null) {
                         planarray.add(answer)
+                        planarrayFull.add(answer)
                     }
 
                 }
                 adapterCustom.notifyDataSetChanged()
+                loadingDialog.dismissDialog()
             }
 
             override fun onCancelled(error: DatabaseError) {
             }
 
         })
-//        spinnerFilter.setOnItemSelectedListener(object :AdapterView.OnItemSelectedListener{
-//            override fun onItemSelected(
-//                parent: AdapterView<*>?,
-//                view: View?,
-//                position: Int,
-//                id: Long
-//            ) {
-//                if(adapter!=null)
-//                {
-//                    adapter!!.setSearchType(parent!!.getItemAtPosition(position).toString())
-//                }
-//            }
-//
-//            override fun onNothingSelected(parent: AdapterView<*>?) {
-//
-//            }
-//
-//        })
+        spinnerFilter.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                if(adapterCustom!=null)
+                {
+                    adapterCustom!!.setSearchType(parent!!.getItemAtPosition(position).toString())
+                }
+            }
 
-//        try {
-//            val searchResult=findViewById<SearchView>(R.id.searchBar)
-//            searchResult.setOnQueryTextListener(object :SearchView.OnQueryTextListener{
-//                override fun onQueryTextSubmit(query: String?): Boolean {
-//                    return false
-//                }
-//
-//                override fun onQueryTextChange(newText: String?): Boolean {
-//                    adapter!!.getFilter().filter(newText)
-//                    return true
-//                }
-//
-//            })
-//        }
-//        catch (ex:Exception)
-//        {
-//            Toast.makeText(this,ex.message.toString(),Toast.LENGTH_LONG).show()
-//        }
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+
+        })
+
+        try {
+            val searchResult=findViewById<SearchView>(R.id.searchBarTour)
+            searchResult.setOnQueryTextListener(object :SearchView.OnQueryTextListener{
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return false
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    adapterCustom!!.getFilter().filter(newText)
+                    return true
+                }
+
+            })
+        }
+        catch (ex:Exception)
+        {
+            Toast.makeText(this,ex.message.toString(),Toast.LENGTH_LONG).show()
+        }
     }
 }

@@ -9,9 +9,7 @@ import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatEditText
@@ -19,9 +17,10 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.RecyclerView
 
-class CustomAdapterHistory(var hist:List<UserHistory>,var context:Context,var userInfo:User):
-    RecyclerView.Adapter<CustomAdapterHistory.ViewHolderHistory>() {
+class CustomAdapterHistory(var hist:List<UserHistory>,var histFull:List<UserHistory>,var context:Context,var userInfo:User):
+    RecyclerView.Adapter<CustomAdapterHistory.ViewHolderHistory>(),Filterable {
 
+    var filterType="ID"
 
     class ViewHolderHistory(ItemView: View):RecyclerView.ViewHolder(ItemView){
         val id=itemView.findViewById<TextView>(R.id.HistorytripID)
@@ -103,6 +102,60 @@ class CustomAdapterHistory(var hist:List<UserHistory>,var context:Context,var us
         var compact = NotificationManagerCompat.from(context,)
         compact.notify(1,builder.build())
 
+    }
+    fun setSearchType(type:String)
+    {
+        this.filterType=type
+    }
+    override fun getFilter(): Filter {
+        return histFilter
+    }
+
+    var histFilter=object : Filter() {
+        override fun performFiltering(constraint: CharSequence?): FilterResults {
+            var tempList = ArrayList<UserHistory>()
+            var filteredList: List<UserHistory>
+            if (constraint == null || constraint.length == 0) {
+                filteredList = histFull.toList()
+            } else {
+                var pattern = constraint.toString().toLowerCase().trim()
+                for (item: UserHistory in histFull) {
+                    if (filterType == "ID") {
+                        if (item.tripdetails.id.toString().toLowerCase().contains(pattern)) {
+                            tempList.add(item)
+                        }
+                    } else if (filterType == "Location") {
+                        if (item.tripdetails.location.toLowerCase().contains(pattern)) {
+                            tempList.add(item)
+                        }
+                    } else if (filterType == "Seats") {
+                        if (item.tripdetails.seats.toString().toLowerCase().contains(pattern)) {
+                            tempList.add(item)
+                        }
+                    } else if (filterType == "Price") {
+                        if (item.tripdetails.price.toString().toLowerCase().contains(pattern)) {
+                            tempList.add(item)
+                        }
+                    } else if (filterType == "Package") {
+                        if (item.curPackage.toLowerCase().contains(pattern)) {
+                            tempList.add(item)
+                        }
+                    }
+
+                }
+                filteredList = tempList.toList()
+            }
+
+            var results = FilterResults()
+            results.values = filteredList
+            return results
+        }
+
+        override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+            var temps = results!!.values as List<UserHistory>
+            hist = temps.toList()
+            notifyDataSetChanged()
+        }
     }
 
 }

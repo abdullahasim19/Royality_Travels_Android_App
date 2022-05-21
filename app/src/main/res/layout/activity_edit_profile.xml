@@ -30,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Enter your Details"
+                android:text="Edit your Details"
                 android:textColor="#363A43"
                 android:textSize="30sp"
                 android:textStyle="bold"
@@ -43,13 +43,24 @@
                 >
 
                 <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/userNameSignUp"
+                    android:id="@+id/editnamedetails"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Name"
                     android:textColor="#363A43"
                     android:textColorHint="#7A8089" />
             </com.google.android.material.textfield.TextInputLayout>
+            <Button
+                android:id="@+id/btneditname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:backgroundTint="@color/design_default_color_secondary_variant"
+                android:textAllCaps="false"
+                android:text="Edit Name"
+                />
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -58,7 +69,7 @@
                 >
 
                 <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/userPhoneSignUp"
+                    android:id="@+id/editphonedetails"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Phone"
@@ -66,7 +77,17 @@
                     android:textColor="#363A43"
                     android:textColorHint="#7A8089" />
             </com.google.android.material.textfield.TextInputLayout>
-
+            <Button
+                android:id="@+id/btneditphone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:backgroundTint="@color/design_default_color_secondary_variant"
+                android:textAllCaps="false"
+                android:text="Edit Phone"
+                />
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -75,7 +96,7 @@
                 >
 
                 <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/emailText"
+                    android:id="@+id/editemaildetails"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Email"
@@ -83,7 +104,17 @@
                     android:textColorHint="#7A8089" />
             </com.google.android.material.textfield.TextInputLayout>
 
-
+            <Button
+                android:id="@+id/btneditemail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:backgroundTint="@color/design_default_color_secondary_variant"
+                android:textAllCaps="false"
+                android:text="Edit Email"
+                />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -93,7 +124,7 @@
                 >
 
                 <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/passwordText"
+                    android:id="@+id/editpassworddetails"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Password"
@@ -102,15 +133,18 @@
                     android:textColorHint="#7A8089" />
             </com.google.android.material.textfield.TextInputLayout>
 
-
-
             <Button
-                android:id="@+id/btnSignUp"
+                android:id="@+id/btneditpassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                android:background="@color/design_default_color_error"
-                android:text="Register" />
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:backgroundTint="@color/design_default_color_secondary_variant"
+                android:textAllCaps="false"
+                android:text="Edit Password"
+                />
+
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

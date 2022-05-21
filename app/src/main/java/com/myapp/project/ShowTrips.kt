@@ -2,6 +2,7 @@ package com.myapp.project
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,8 +19,10 @@ class ShowTrips : AppCompatActivity() {
     lateinit var reference: DatabaseReference
     lateinit var adapterCustom:CustomAdapterTripView
     lateinit var options: FirebaseRecyclerOptions<Trips>
-    lateinit var adapter: FirebaseRecyclerAdapter<Trips, TripViewHolder>
+    //lateinit var adapter: FirebaseRecyclerAdapter<Trips, TripViewHolder>
     lateinit var userData:User
+    lateinit var loadingdialog:LoadingDialog
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_trips)
@@ -32,6 +35,10 @@ class ShowTrips : AppCompatActivity() {
         {
             Toast.makeText(this,e.message.toString(),Toast.LENGTH_SHORT).show()
         }
+
+        loadingdialog=LoadingDialog(this@ShowTrips)
+
+        loadingdialog.startLoading()
         initialize()
         //SetRecyclerView()
 
@@ -48,7 +55,11 @@ class ShowTrips : AppCompatActivity() {
 
         var tripsarray:List<Trips>
         tripsarray=ArrayList<Trips>()
-        adapterCustom= CustomAdapterTripView(tripsarray,this,userData)
+
+        var tripsarrayFull:List<Trips>
+        tripsarrayFull=ArrayList<Trips>()
+
+        adapterCustom= CustomAdapterTripView(tripsarray,tripsarrayFull,this,userData)
         recycler.layoutManager=LinearLayoutManager(this)
         recycler.adapter=adapterCustom
 
@@ -58,51 +69,53 @@ class ShowTrips : AppCompatActivity() {
                 {
                     val answer=d.getValue(Trips::class.java)
                     tripsarray.add(answer!!)
+                    tripsarrayFull.add(answer!!)
                 }
                 adapterCustom.notifyDataSetChanged()
+                loadingdialog.dismissDialog()
             }
 
             override fun onCancelled(error: DatabaseError) {
             }
 
         })
-//        spinnerFilter.setOnItemSelectedListener(object :AdapterView.OnItemSelectedListener{
-//            override fun onItemSelected(
-//                parent: AdapterView<*>?,
-//                view: View?,
-//                position: Int,
-//                id: Long
-//            ) {
-//                if(adapter!=null)
-//                {
-//                    adapter!!.setSearchType(parent!!.getItemAtPosition(position).toString())
-//                }
-//            }
-//
-//            override fun onNothingSelected(parent: AdapterView<*>?) {
-//
-//            }
-//
-//        })
+        spinnerFilter.setOnItemSelectedListener(object :AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                if(adapterCustom!=null)
+                {
+                    adapterCustom!!.setSearchType(parent!!.getItemAtPosition(position).toString())
+                }
+            }
 
-//        try {
-//            val searchResult=findViewById<SearchView>(R.id.searchBar)
-//            searchResult.setOnQueryTextListener(object :SearchView.OnQueryTextListener{
-//                override fun onQueryTextSubmit(query: String?): Boolean {
-//                    return false
-//                }
-//
-//                override fun onQueryTextChange(newText: String?): Boolean {
-//                    adapter!!.getFilter().filter(newText)
-//                    return true
-//                }
-//
-//            })
-//        }
-//        catch (ex:Exception)
-//        {
-//            Toast.makeText(this,ex.message.toString(),Toast.LENGTH_LONG).show()
-//        }
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+
+        })
+
+        try {
+            val searchResult=findViewById<SearchView>(R.id.searchBar)
+            searchResult.setOnQueryTextListener(object :SearchView.OnQueryTextListener{
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return false
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    adapterCustom!!.getFilter().filter(newText)
+                    return true
+                }
+
+            })
+        }
+        catch (ex:Exception)
+        {
+            Toast.makeText(this,ex.message.toString(),Toast.LENGTH_LONG).show()
+        }
     }
 
 //    private fun SetRecyclerView()

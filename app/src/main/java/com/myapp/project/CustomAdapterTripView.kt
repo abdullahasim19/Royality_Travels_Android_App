@@ -5,14 +5,14 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 
 import androidx.recyclerview.widget.RecyclerView
 
-class CustomAdapterTripView(var trips:List<Trips>,var context:Context,var userInfo:User):
-    RecyclerView.Adapter<CustomAdapterTripView.ViewHolderTrip>() {
+class CustomAdapterTripView(var trips:List<Trips>, var tripsFull: List<Trips>, var context:Context, var userInfo:User):
+    RecyclerView.Adapter<CustomAdapterTripView.ViewHolderTrip>(),Filterable {
+
+    var filterType="ID"
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderTrip {
         val v:View= LayoutInflater.from(parent.getContext()).inflate(R.layout.trips_view,parent,false)
@@ -72,5 +72,66 @@ class CustomAdapterTripView(var trips:List<Trips>,var context:Context,var userIn
         val price=itemView.findViewById<TextView>(R.id.tripPrice)
     }
 
+    override fun getFilter(): Filter {
+        return tripFilter
+    }
+
+    fun setSearchType(type:String)
+    {
+        this.filterType=type
+    }
+    var tripFilter=object : Filter(){
+        override fun performFiltering(constraint: CharSequence?): FilterResults {
+            var tempList=ArrayList<Trips>()
+            var filteredList:List<Trips>
+            if(constraint==null || constraint.length==0)
+            {
+                filteredList=tripsFull.toList()
+            }
+            else
+            {
+                var pattern=constraint.toString().toLowerCase().trim()
+                for (item:Trips in tripsFull)
+                {
+                    if(filterType=="ID") {
+                        if (item.id.toString().toLowerCase().contains(pattern)) {
+                            tempList.add(item)
+                        }
+                    }
+                    else if(filterType=="Location")
+                    {
+                        if (item.location.toLowerCase().contains(pattern)) {
+                            tempList.add(item)
+                        }
+                    }
+                    else if(filterType=="Seats")
+                    {
+                        if (item.seats.toString().toLowerCase().contains(pattern)) {
+                            tempList.add(item)
+                        }
+                    }
+                    else if(filterType=="Price")
+                    {
+                        if (item.price.toString().toLowerCase().contains(pattern)) {
+                            tempList.add(item)
+                        }
+                    }
+
+                }
+                filteredList=tempList.toList()
+            }
+
+            var results=FilterResults()
+            results.values=filteredList
+            return results
+        }
+
+        override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+            var temps=results!!.values as List<Trips>
+            trips=temps.toList()
+            notifyDataSetChanged()
+        }
+
+    }
 
 }

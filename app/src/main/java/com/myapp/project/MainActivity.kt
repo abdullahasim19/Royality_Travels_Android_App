@@ -18,13 +18,19 @@ class MainActivity : AppCompatActivity() {
     lateinit var login:Button
     lateinit var signUp: Button
     var auth=FirebaseAuth.getInstance()
+    var loadingdialog:LoadingDialog=LoadingDialog(this@MainActivity)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         register()
+
+
         login.setOnClickListener {
             val userEmail=email.text.toString()
             var userPass=pass.text.toString()
+
+            loadingdialog.startLoading()
+
             signInFirebase(userEmail,userPass)
 
         }
@@ -39,7 +45,7 @@ class MainActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
-                    Toast.makeText(this,"Login Done",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this,"Logging In",Toast.LENGTH_SHORT).show()
                     val i =Intent(this,MainPage::class.java)
 
                     val reference= FirebaseDatabase.getInstance()
@@ -51,7 +57,7 @@ class MainActivity : AppCompatActivity() {
                                 val answer=d.getValue(User::class.java)
                                 if(answer!!.email==mailUser)
                                 {
-
+                                    loadingdialog.dismissDialog()
                                     i.putExtra("UserInfo",answer)
                                     startActivity(i)
                                 }
@@ -102,6 +108,37 @@ class MainActivity : AppCompatActivity() {
         signUp=findViewById<Button>(R.id.btnSignUp)
     }
 
+    override fun onStart() {
+        super.onStart()
 
+        var user=auth.currentUser
+        if(user!=null)
+        {
+
+            loadingdialog.startLoading()
+            val i =Intent(this,MainPage::class.java)
+            val reference= FirebaseDatabase.getInstance()
+            reference.getReference("Users").addListenerForSingleValueEvent(object :
+                ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for(d in snapshot.children)
+                    {
+                        val answer=d.getValue(User::class.java)
+                        if(answer!!.email==user.email)
+                        {
+                            loadingdialog.dismissDialog()
+                            i.putExtra("UserInfo",answer)
+                            startActivity(i)
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                }
+
+            })
+
+        }
+    }
 
 }

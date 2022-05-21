@@ -1,10 +1,22 @@
 <resources>
     <string name="app_name">Project</string>
     <string-array name="filterings">
-        <item>Name</item>
+        <item>ID</item>
         <item>Location</item>
-        <item>Phone</item>
-        <item>Description</item>
-        <item>Rating</item>
+        <item>Seats</item>
+        <item>Price</item>
+    </string-array>
+    <string-array name="history">
+        <item>ID</item>
+        <item>Location</item>
+        <item>Seats</item>
+        <item>Price</item>
+        <item>Package</item>
+    </string-array>
+
+    <string-array name="tourplan">
+        <item>ID</item>
+        <item>Location</item>
+        <item>Plan</item>
     </string-array>
 </resources>
