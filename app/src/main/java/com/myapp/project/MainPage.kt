@@ -1,5 +1,6 @@
 package com.myapp.project
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,10 +11,12 @@ import com.google.firebase.auth.FirebaseAuth
 
 class MainPage : AppCompatActivity() {
     lateinit var name:TextView
+    lateinit var userData:User
+    lateinit var title:TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_page)
-        lateinit var userData:User
+        title=findViewById<TextView>(R.id.welcometext)
 
         try {
             userData=intent.getSerializableExtra("UserInfo") as User
@@ -23,7 +26,7 @@ class MainPage : AppCompatActivity() {
             Toast.makeText(this,e.message.toString(),Toast.LENGTH_SHORT).show()
         }
 
-        var title=findViewById<TextView>(R.id.welcometext)
+
         title.text=title.text.toString().plus(userData.userNameTrip)
 
 
@@ -75,7 +78,25 @@ class MainPage : AppCompatActivity() {
         edits.setOnClickListener {
             val i=Intent(this,EditProfile::class.java)
             i.putExtra("UserInfo",userData)
-            startActivity(i)
+            startActivityForResult(i,1)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode== Activity.RESULT_OK)
+        {
+            if(requestCode==1)
+            {
+                if(data!=null) {
+                    userData = data!!.getSerializableExtra("UserInfoUpdated") as User
+                    if(title.text!=userData.userNameTrip)
+                    {
+                        title.text="Welcome "
+                        title.text=title.text.toString().plus(userData.userNameTrip)
+                    }
+                }
+            }
         }
     }
 }

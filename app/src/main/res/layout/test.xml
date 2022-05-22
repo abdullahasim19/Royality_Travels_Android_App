@@ -1,0 +1,84 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#d3d3d3"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/goldenPackage"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:textStyle="bold"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="100dp"
+        android:text="GOLDEN PACKAGE"
+        android:background="#d4af37 "
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:id="@+id/PackageSilver"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:textStyle="bold"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="300dp"
+        android:text="SILVER PACKAGE"
+        android:background="#c0c0c0"
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:id="@+id/PackageBronze"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:textStyle="bold"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="500dp"
+        android:text="BRONZE PACKAGE"
+        android:background="#cd7f32"
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:id="@+id/GoldeneditTextTextMultiLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="60dp"
+        android:ems="10"
+        android:textSize="15sp"
+        android:text="This is our premium package with best services providing customers luxurious tour.A special tourist for their service available with 5 star hotel. It will be given on First come first serve. Maximum packages  are 5 available for each place."
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
+        android:minHeight="48dp"
+        tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
+    <TextView
+        android:id="@+id/SilvereditTextTextMultiLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="270dp"
+        android:ems="10"
+        android:textSize="15sp"
+        android:text="This is our second best package with services providing customers good standard tour.A 5 star hotel service. It will be given on First come first serve. Maximum packages  are 10 available for each place."
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
+        android:minHeight="48dp"
+        tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/BronzetTextTextMultiLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="480dp"
+        android:ems="10"
+        android:textSize="15sp"
+        android:text="This is our standard package with services providing customers good standard tour.A 3 star hotel service. It will be given on First come first serve. Maximum packages  are 15 available for each place."
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
+        android:minHeight="48dp"
+        tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
+
+</RelativeLayout>
