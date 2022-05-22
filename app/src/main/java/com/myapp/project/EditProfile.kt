@@ -14,6 +14,12 @@ import com.google.firebase.database.ValueEventListener
 
 class EditProfile : AppCompatActivity() {
     lateinit var userData:User
+    lateinit var nameRef:AppCompatEditText
+    lateinit var phoneref:AppCompatEditText
+    lateinit var emailRef:AppCompatEditText
+    lateinit var passRef:AppCompatEditText
+    var loadingDialog=LoadingDialog(this@EditProfile)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_profile)
@@ -29,10 +35,13 @@ class EditProfile : AppCompatActivity() {
         val b=findViewById<Button>(R.id.btneditphone)
         val c=findViewById<Button>(R.id.btneditemail)
         val d=findViewById<Button>(R.id.btneditpassword)
-        val nameRef=findViewById<AppCompatEditText>(R.id.editnamedetails)
-        val phoneref=findViewById<AppCompatEditText>(R.id.editphonedetails)
-        val emailRef=findViewById<AppCompatEditText>(R.id.editemaildetails)
-        val passRef=findViewById<AppCompatEditText>(R.id.editpassworddetails)
+        nameRef=findViewById<AppCompatEditText>(R.id.editnamedetails)
+        phoneref=findViewById<AppCompatEditText>(R.id.editphonedetails)
+        emailRef=findViewById<AppCompatEditText>(R.id.editemaildetails)
+        passRef=findViewById<AppCompatEditText>(R.id.editpassworddetails)
+
+        loadingDialog.startLoading()
+        PopulateData()
 
         a.setOnClickListener {
             val n=nameRef.text.toString()
@@ -100,9 +109,35 @@ class EditProfile : AppCompatActivity() {
                     if(answer!!.email==oldemail)
                     {
                         d.ref.setValue(userData)
+                        break
                     }
 
                 }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+        })
+    }
+    fun PopulateData()
+    {
+        val reference= FirebaseDatabase.getInstance()
+        reference.getReference("Users").addListenerForSingleValueEvent(object :
+            ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for(d in snapshot.children)
+                {
+                    val answer=d.getValue(User::class.java)
+                    if(answer!!.email==userData.email)
+                    {
+                        nameRef.setText(answer.userNameTrip.toString())
+                        phoneref.setText(answer.phoneNumber.toString())
+                        emailRef.setText(answer.email.toString())
+                        break
+                    }
+                }
+                loadingDialog.dismissDialog()
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -123,6 +158,7 @@ class EditProfile : AppCompatActivity() {
                     if(answer!!.email==userData.email)
                     {
                         d.ref.setValue(userData)
+                        break
                     }
 
                 }

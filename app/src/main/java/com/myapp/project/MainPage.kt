@@ -7,15 +7,27 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import com.google.firebase.auth.FirebaseAuth
 
 class MainPage : AppCompatActivity() {
     lateinit var name:TextView
     lateinit var userData:User
     lateinit var title:TextView
+    lateinit var adView:AdView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_page)
+
+        adView=findViewById<AdView>(R.id.adView)
+
+        MobileAds.initialize(this)
+        var adRequest=AdRequest.Builder().build()
+        adView.loadAd(adRequest)
+
         title=findViewById<TextView>(R.id.welcometext)
 
         try {

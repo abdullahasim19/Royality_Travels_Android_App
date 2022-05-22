@@ -1,11 +1,17 @@
 package com.myapp.project
 
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.core.app.NotificationManagerCompat
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -13,6 +19,7 @@ import com.google.firebase.database.ValueEventListener
 
 class BookingActivity : AppCompatActivity() {
     lateinit var userData:User
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_booking)
@@ -49,7 +56,7 @@ class BookingActivity : AppCompatActivity() {
             val seatsEntered=seatsentered.text.toString().toInt()
             var packagee:String="None"
             if (seatsEntered<0 || seatsEntered>data.seats) {
-                Toast.makeText(applicationContext,"Not enough Seats",Toast.LENGTH_SHORT)
+                Toast.makeText(applicationContext,"Not enough Seats",Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             val insertion=FirebaseHandler<UserHistory>("History")
@@ -79,7 +86,8 @@ class BookingActivity : AppCompatActivity() {
             val dataToInsert=UserHistory(userData.email,tempData,packagee)
             insertion.insert(dataToInsert)
             UpdateSeats("Trips",data,seatsEntered)
-
+            ShowNotification("Royality Travels","Booking Done")
+            Toast.makeText(this,"Booking Done",Toast.LENGTH_SHORT).show()
         }
     }
     fun UpdateSeats(tableName:String,details:Trips,bookSeats:Int)
@@ -92,7 +100,7 @@ class BookingActivity : AppCompatActivity() {
                     val answer=d.getValue(Trips::class.java)
                     if(answer!!.id==details.id)
                     {
-                        Toast.makeText(applicationContext,"In",Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(applicationContext,"In",Toast.LENGTH_SHORT).show()
                         val temp=answer.seats-bookSeats
                         answer.seats=temp
                         d.ref.setValue(answer)
@@ -105,5 +113,19 @@ class BookingActivity : AppCompatActivity() {
             }
 
         })
+    }
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun ShowNotification(title:String,text:String)
+    {
+        var channel= NotificationChannel("1","1", NotificationManager.IMPORTANCE_DEFAULT)
+        var manager=getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
+        manager.createNotificationChannel(channel)
+
+        var builder = Notification.Builder(this,"1",)
+        builder.setSmallIcon(R.drawable.ic_stat_add_alert).setContentTitle(title).setContentText(text)
+
+        var compact = NotificationManagerCompat.from(this)
+        compact.notify(1,builder.build())
+
     }
 }

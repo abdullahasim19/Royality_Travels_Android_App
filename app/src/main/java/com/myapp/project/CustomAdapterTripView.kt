@@ -1,11 +1,18 @@
 package com.myapp.project
 
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationManagerCompat
 
 import androidx.recyclerview.widget.RecyclerView
 
@@ -19,6 +26,7 @@ class CustomAdapterTripView(var trips:List<Trips>, var tripsFull: List<Trips>, v
         return ViewHolderTrip(v)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: ViewHolderTrip, position: Int) {
         holder.id.text=trips[position].id.toString()
 
@@ -46,19 +54,33 @@ class CustomAdapterTripView(var trips:List<Trips>, var tripsFull: List<Trips>, v
 
         }
         holder.wishlist.setOnClickListener {
-            Toast.makeText(context,"Wish", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(context,"Wish", Toast.LENGTH_SHORT).show()
             val dataToInsert=WishListData(userInfo.email,trips[position])
 
             val refe=FirebaseHandler<WishListData>("Wishlist")
             refe.insert(dataToInsert)
             Toast.makeText(context,"Added to Wishlist",Toast.LENGTH_SHORT).show()
+            ShowNotification("Royality Travels","Item Added to Wishlist")
         }
     }
 
     override fun getItemCount(): Int {
         return trips.size
     }
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun ShowNotification(title:String,text:String)
+    {
+        var channel= NotificationChannel("1","1", NotificationManager.IMPORTANCE_DEFAULT)
+        var manager=context.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
+        manager.createNotificationChannel(channel)
 
+        var builder = Notification.Builder(context,"1",)
+        builder.setSmallIcon(R.drawable.ic_stat_add_alert).setContentTitle(title).setContentText(text)
+
+        var compact = NotificationManagerCompat.from(context,)
+        compact.notify(1,builder.build())
+
+    }
 
     class ViewHolderTrip(ItemView: View):RecyclerView.ViewHolder(ItemView){
         val id=itemView.findViewById<TextView>(R.id.tripID)

@@ -67,17 +67,18 @@ class CustomAdapterHistory(var hist:List<UserHistory>,var histFull:List<UserHist
         holder.review.setOnClickListener {
             val remail=userInfo.email
             val givens=holder.give.text.toString()
-            val ratingGivens=holder.ratings.text.toString().toDouble()
+
             if(givens.isEmpty())
             {
-                Toast.makeText(context,"Kindly Write your Review",Toast.LENGTH_SHORT)
+                Toast.makeText(context,"Kindly Write your Review",Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             if(holder.ratings.text.toString().isEmpty())
             {
-                Toast.makeText(context,"Kindly Write your Rating",Toast.LENGTH_SHORT)
+                Toast.makeText(context,"Kindly Write your Rating",Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+            val ratingGivens=holder.ratings.text.toString().toDouble()
             val dataToInsert=TripReview(remail,hist[position].tripdetails.id,hist[position].tripdetails.location,givens,ratingGivens)
             val doits=FirebaseHandler<TripReview>("Reviews")
             doits.insert(dataToInsert)
@@ -99,7 +100,7 @@ class CustomAdapterHistory(var hist:List<UserHistory>,var histFull:List<UserHist
         var builder = Notification.Builder(context,"1",)
         builder.setSmallIcon(R.drawable.ic_stat_add_alert).setContentTitle(title).setContentText(text)
 
-        var compact = NotificationManagerCompat.from(context,)
+        var compact = NotificationManagerCompat.from(context)
         compact.notify(1,builder.build())
 
     }
