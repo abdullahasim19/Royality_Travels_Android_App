@@ -25,13 +25,13 @@ class ExplorePage : AppCompatActivity() {
     lateinit var options: FirebaseRecyclerOptions<Trips>
     lateinit var adapter: FirebaseRecyclerAdapter<Trips, TripViewHolder>
     lateinit var explorearray:List<TripReview>
-
+    var loadingDialog=LoadingDialog(this@ExplorePage)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_explore_page)
         val b=findViewById<Button>(R.id.sortingBest)
         val c=findViewById<Button>(R.id.sortingWorst)
-
+        loadingDialog.startLoading()
         initialize()
         b.setOnClickListener {
             explorearray=explorearray.sortedByDescending { it.ratingofTrip }
@@ -74,6 +74,7 @@ class ExplorePage : AppCompatActivity() {
 
                 }
                 adapterCustom.notifyDataSetChanged()
+                loadingDialog.dismissDialog()
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -81,43 +82,6 @@ class ExplorePage : AppCompatActivity() {
             }
 
         })
-//        spinnerFilter.setOnItemSelectedListener(object :AdapterView.OnItemSelectedListener{
-//            override fun onItemSelected(
-//                parent: AdapterView<*>?,
-//                view: View?,
-//                position: Int,
-//                id: Long
-//            ) {
-//                if(adapter!=null)
-//                {
-//                    adapter!!.setSearchType(parent!!.getItemAtPosition(position).toString())
-//                }
-//            }
-//
-//            override fun onNothingSelected(parent: AdapterView<*>?) {
-//
-//            }
-//
-//        })
-
-//        try {
-//            val searchResult=findViewById<SearchView>(R.id.searchBar)
-//            searchResult.setOnQueryTextListener(object :SearchView.OnQueryTextListener{
-//                override fun onQueryTextSubmit(query: String?): Boolean {
-//                    return false
-//                }
-//
-//                override fun onQueryTextChange(newText: String?): Boolean {
-//                    adapter!!.getFilter().filter(newText)
-//                    return true
-//                }
-//
-//            })
-//        }
-//        catch (ex:Exception)
-//        {
-//            Toast.makeText(this,ex.message.toString(),Toast.LENGTH_LONG).show()
-//        }
     }
 
 }

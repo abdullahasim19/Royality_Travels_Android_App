@@ -80,6 +80,12 @@ class MainPage : AppCompatActivity() {
             i.putExtra("UserInfo",userData)
             startActivityForResult(i,1)
         }
+
+        val info=findViewById<Button>(R.id.packageInfo)
+        info.setOnClickListener {
+            val i=Intent(this,PackageInfo::class.java)
+            startActivity(i)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

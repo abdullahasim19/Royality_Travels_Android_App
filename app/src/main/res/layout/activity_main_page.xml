@@ -73,6 +73,7 @@
         android:backgroundTint="@color/design_default_color_error"
         />
         <Button
+            android:id="@+id/packageInfo"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_width="match_parent"
