@@ -17,13 +17,13 @@ class MainActivity : AppCompatActivity() {
     lateinit var pass:AppCompatEditText
     lateinit var login:Button
     lateinit var signUp: Button
+    lateinit var forgotPass:Button
     var auth=FirebaseAuth.getInstance()
     var loadingdialog:LoadingDialog=LoadingDialog(this@MainActivity)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         register()
-
 
         login.setOnClickListener {
             val userEmail=email.text.toString()
@@ -36,6 +36,11 @@ class MainActivity : AppCompatActivity() {
         }
         signUp.setOnClickListener {
             val i=Intent(this,SignUp::class.java)
+            startActivity(i)
+        }
+
+        forgotPass.setOnClickListener {
+            val i=Intent(this,ForgotPassword::class.java)
             startActivity(i)
         }
     }
@@ -72,7 +77,7 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     // If sign in fails, display a message to the user.
                     Toast.makeText(this,task.exception!!.message.toString(),Toast.LENGTH_SHORT).show()
-
+                    loadingdialog.dismissDialog()
                 }
             }
     }
@@ -106,6 +111,7 @@ class MainActivity : AppCompatActivity() {
         pass=findViewById<AppCompatEditText>(R.id.passwordText)
         login=findViewById<Button>(R.id.btnLogin)
         signUp=findViewById<Button>(R.id.btnSignUp)
+        forgotPass=findViewById<Button>(R.id.btnForgot)
     }
 
     override fun onStart() {
@@ -132,7 +138,6 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                 }
-
                 override fun onCancelled(error: DatabaseError) {
                 }
 

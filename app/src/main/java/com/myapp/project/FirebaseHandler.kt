@@ -30,28 +30,9 @@ class FirebaseHandler<T> {
             }
         }
         catch (e:Exception) {
-            Log.d("Meow",e.message.toString())
+            Log.d("Firebase Error",e.message.toString())
         }
 
         return check
-    }
-    fun getTripsData(data:ArrayList<Trips>)
-    {
-
-        database.getReference(tablename).addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                for(d in snapshot.children)
-                {
-                    val answer=d.getValue(Trips::class.java)
-
-                    data.add(answer!!)
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-            }
-
-        })
-
     }
 }

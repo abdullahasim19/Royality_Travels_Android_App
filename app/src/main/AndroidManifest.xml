@@ -14,11 +14,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Project">
         <activity
+            android:name=".ForgotPassword"
+            android:exported="true" />
+        <activity
             android:name=".PackageInfo"
             android:exported="true" />
         <activity
             android:name=".EditProfile"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".ExplorePage"
             android:exported="true" />
