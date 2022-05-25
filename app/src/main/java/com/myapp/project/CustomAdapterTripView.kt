@@ -1,5 +1,6 @@
 package com.myapp.project
 
+import android.app.Activity
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -15,6 +16,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationManagerCompat
 
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class CustomAdapterTripView(var trips:List<Trips>, var tripsFull: List<Trips>, var context:Context, var userInfo:User):
     RecyclerView.Adapter<CustomAdapterTripView.ViewHolderTrip>(),Filterable {
@@ -56,13 +61,48 @@ class CustomAdapterTripView(var trips:List<Trips>, var tripsFull: List<Trips>, v
         holder.wishlist.setOnClickListener {
             //Toast.makeText(context,"Wish", Toast.LENGTH_SHORT).show()
             val dataToInsert=WishListData(userInfo.email,trips[position])
+            AddToWishlist(dataToInsert)
 
-            val refe=FirebaseHandler<WishListData>("Wishlist")
-            refe.insert(dataToInsert)
-            Toast.makeText(context,"Added to Wishlist",Toast.LENGTH_SHORT).show()
-            ShowNotification("Royality Travels","Item Added to Wishlist")
         }
     }
+
+
+    fun AddToWishlist(dataCheck:WishListData)
+    {
+        val loadingDialog=LoadingDialog(context as Activity)
+        loadingDialog.startLoading()
+        var check=false
+        FirebaseDatabase.getInstance().getReference("Wishlist").addValueEventListener(object : ValueEventListener {
+            @RequiresApi(Build.VERSION_CODES.O)
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for(d in snapshot.children)
+                {
+                    val answer=d.getValue(WishListData::class.java)
+                    if(answer!!.tripdetailsWish.id==dataCheck.tripdetailsWish.id)
+                    {
+                        check=true
+                        break
+                    }
+                }
+                if (check==false)
+                {
+                    val refe=FirebaseHandler<WishListData>("Wishlist")
+                    refe.insert(dataCheck)
+                    Toast.makeText(context,"Added to Wishlist",Toast.LENGTH_SHORT).show()
+                    ShowNotification("Royality Travels","Item Added to Wishlist")
+                }
+                else
+                    Toast.makeText(context,"Trip Already in Wishlist",Toast.LENGTH_SHORT).show()
+                loadingDialog.dismissDialog()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+        })
+    }
+
+
 
     override fun getItemCount(): Int {
         return trips.size
